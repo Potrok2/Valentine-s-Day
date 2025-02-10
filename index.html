@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O întrebare pentru tine</title>
+    <title>A question for you ❤️</title>
     <style>
         body {
             text-align: center;
@@ -27,16 +27,31 @@
             cursor: pointer;
             margin: 20px;
             border-radius: 10px;
+            transition: all 0.3s ease;
         }
         .btn:hover {
             background-color: #cc0044;
+        }
+        #noBtn {
+            position: relative;
         }
     </style>
 </head>
 <body>
     <div class="heart">❤️</div>
-    <h1>Vrei să fii Valentin-ul meu? 💕</h1>
-    <button class="btn" onclick="alert('Yay! ❤️ Ne vedem de Valentine’s!')">DA</button>
-    <button class="btn" onclick="alert('😢 Oh... poate altă dată!')">NU</button>
+    <h1>Will you be my Valentine? 💕</h1>
+    <button class="btn" onclick="alert('Yay! ❤️ Can’t wait!')">YES</button>
+    <button class="btn" id="noBtn" onclick="growNoButton()">NO</button>
+
+    <script>
+        let noButton = document.getElementById("noBtn");
+        let size = 1;
+
+        function growNoButton() {
+            size += 0.3;
+            noButton.style.transform = `scale(${size})`;
+            noButton.innerText = "Are you sure? 😢";
+        }
+    </script>
 </body>
 </html>
