@@ -1,57 +1,262 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>❤️</title>
-    <style>
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background-color: #ffe6e6;
-            color: #ff3366;
-            margin-top: 50px;
-        }
-        h1 {
-            font-size: 2.5em;
-        }
-        .heart {
-            font-size: 5em;
-        }
-        .btn {
-            background-color: #ff3366;
-            color: white;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border: none;
-            cursor: pointer;
-            margin: 20px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #cc0044;
-        }
-        #noBtn {
-            position: relative;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>❤️ Pentru tine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#ffd1dc; --bg2:#ff8fab; --bg3:#ffe5ec;
+  --ink:#7a0f33; --accent:#ff2e63; --accent2:#c9184a;
+  --card:rgba(255,255,255,.72); --cardline:rgba(255,255,255,.8);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg1:#2a0a18; --bg2:#6b1235; --bg3:#3d0f25;
+    --ink:#ffd9e4; --accent:#ff4d7e; --accent2:#ff8fab;
+    --card:rgba(40,10,24,.55); --cardline:rgba(255,120,160,.35);
+  }
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  font-family:'Nunito',system-ui,sans-serif; color:var(--ink);
+  background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+  overflow:hidden; display:grid; place-items:center; touch-action:manipulation;
+}
+canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+
+.card{
+  position:relative; z-index:1; width:min(92vw,520px); padding:36px 28px 32px; text-align:center;
+  background:var(--card); border:1.5px solid var(--cardline); border-radius:32px;
+  box-shadow:0 12px 30px rgba(201,24,74,.22);
+  animation:enter 1s cubic-bezier(.2,1.4,.4,1) both;
+}
+@keyframes enter{from{opacity:0;transform:translateY(40px) scale(.9) rotate(-2deg)}to{opacity:1;transform:none}}
+
+.heart{width:130px;height:130px;margin:0 auto 6px;animation:beat 1.2s ease-in-out infinite;cursor:pointer;will-change:transform}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.18)}30%{transform:scale(1)}45%{transform:scale(1.12)}}
+
+h1{font-family:'Pacifico',cursive;font-weight:400;font-size:clamp(1.8rem,7vw,2.6rem);line-height:1.25;margin:10px 0 6px;color:var(--accent2)}
+.cursor::after{content:"|";animation:blink .8s steps(1) infinite;margin-left:2px}
+@keyframes blink{50%{opacity:0}}
+.sub{margin:0 0 22px;font-weight:600;min-height:1.6em;opacity:.9}
+
+.btns{position:relative;display:flex;gap:16px;justify-content:center;align-items:center;min-height:90px;flex-wrap:wrap}
+.btn{
+  font-family:inherit;font-weight:800;font-size:1.15rem;border:none;cursor:pointer;color:#fff;
+  padding:14px 34px;border-radius:999px;transition:transform .25s cubic-bezier(.2,1.6,.4,1),background .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+#yes{background:linear-gradient(135deg,#ff4d7e,#ff2e63);box-shadow:0 8px 24px rgba(255,46,99,.5);transform:scale(var(--s,1))}
+#yes:hover{background:linear-gradient(135deg,#ff2e63,#c9184a)}
+@keyframes pulse{0%,100%{box-shadow:0 8px 24px rgba(255,46,99,.5)}50%{box-shadow:0 8px 40px rgba(255,46,99,.95)}}
+#no{background:#8d99ae;box-shadow:0 6px 16px rgba(0,0,0,.2);z-index:5;transition:left .35s cubic-bezier(.2,1.4,.4,1),top .35s cubic-bezier(.2,1.4,.4,1),transform .25s}
+#no.run{position:fixed}
+#no.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-8px) rotate(-6deg)}75%{transform:translateX(8px) rotate(6deg)}}
+
+.win{display:none}
+.card.won .ask{display:none}
+.card.won .win{display:block;animation:pop .8s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes pop{from{opacity:0;transform:scale(.4) rotate(-8deg)}to{opacity:1;transform:none}}
+.big{font-family:'Pacifico',cursive;font-size:clamp(2rem,9vw,3rem);color:var(--accent2);margin:6px 0}
+.count{display:inline-block;margin-top:14px;padding:10px 20px;border-radius:999px;background:var(--accent);color:#fff;font-weight:800}
+.again{margin-top:18px;background:transparent;color:var(--ink);border:2px solid var(--ink);padding:8px 20px;font-size:.95rem}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
 </head>
 <body>
-    <div class="heart">❤️</div>
-    <h1>Will you be my Valentine? 💕</h1>
-    <button class="btn" onclick="alert('Yay! ❤️ Ne vedem pe 14!')">DA</button>
-    <button class="btn" id="noBtn" onclick="growNoButton()">NU</button>
+<canvas id="fx" aria-hidden="true"></canvas>
 
-    <script>
-        let noButton = document.getElementById("noBtn");
-        let size = 1;
+<main class="card" id="card">
+  <div class="ask">
+    <svg class="heart" id="heart" viewBox="0 0 100 90" role="img" aria-label="Inimă care bate">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8fab"/><stop offset="1" stop-color="#e5174f"/></linearGradient></defs>
+      <path d="M50 85C20 62 4 46 4 28 4 14 15 5 28 5c9 0 17 5 22 13C55 10 63 5 72 5c13 0 24 9 24 23 0 18-16 34-46 57z" fill="url(#g)"/>
+      <ellipse cx="29" cy="24" rx="9" ry="5" fill="#fff" opacity=".45" transform="rotate(-35 29 24)"/>
+    </svg>
+    <h1 id="title" class="cursor"></h1>
+    <p class="sub" id="sub"></p>
+    <div class="btns" id="btns">
+      <button class="btn" id="yes">DA 💖</button>
+      <button class="btn" id="no">NU</button>
+    </div>
+  </div>
 
-        function growNoButton() {
-            size += 0.3;
-            noButton.style.transform = `scale(${size})`;
-            noButton.innerText = "Nu prea cred";
-        }
-    </script>
+  <div class="win" aria-live="polite">
+    <div class="big">Știam eu! 🥰</div>
+    <p style="font-weight:800;font-size:1.2rem;margin:4px 0">Ne vedem pe 14! ❤️</p>
+    <div class="count" id="count"></div><br>
+    <button class="btn again" id="again">Mai vreau o dată 🔁</button>
+  </div>
+</main>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const card = $('card'), yes = $('yes'), no = $('no'), sub = $('sub'), title = $('title');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- typewriter ---------- */
+  const text = 'Vrei să fii Valentine-a mea? 💕';
+  let ti = 0;
+  function type(){
+    if (reduce){ title.textContent = text; title.classList.remove('cursor'); sub.textContent = 'Alege cu grijă... 😏'; return; }
+    title.textContent = [...text].slice(0, ++ti).join('');
+    if (ti < [...text].length) setTimeout(type, 70);
+    else { title.classList.remove('cursor'); sub.textContent = 'Alege cu grijă... 😏'; }
+  }
+  setTimeout(type, 700);
+
+  /* ---------- canvas: floating hearts, trail, confetti ---------- */
+  const cv = $('fx'), ctx = cv.getContext('2d');
+  let W, H, dpr;
+  function resize(){
+    dpr = 1;
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  addEventListener('resize', resize); resize();
+
+  const EMOJI = ['❤️','💖','💕','💗','💘','🌹','✨'];
+  const SPR = {};
+  EMOJI.forEach(e => { const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d'); x.font = '48px serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(e, 32, 34); SPR[e] = c; });
+  const parts = [];
+  const rnd = (a, b) => a + Math.random() * (b - a);
+
+  function floater(){
+    parts.push({ kind:'float', e:EMOJI[(Math.random()*4)|0], x:rnd(0,W), y:H+40, vx:rnd(-.3,.3), vy:rnd(-1.4,-.5),
+      s:rnd(16,38), a:rnd(.25,.6), ph:rnd(0,6.28), life:1 });
+  }
+  function burst(x, y, n = 70){
+    for (let i = 0; i < n; i++){
+      const ang = rnd(0, 6.283), sp = rnd(3, 13);
+      parts.push({ kind:'burst', e:EMOJI[(Math.random()*EMOJI.length)|0], x, y, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp - 4,
+        s:rnd(16,34), a:1, ph:rnd(0,6.28), life:1, rot:rnd(-.2,.2) });
+    }
+  }
+  function rain(){
+    for (let i = 0; i < 45; i++){
+      setTimeout(() => parts.push({ kind:'burst', e:EMOJI[(Math.random()*EMOJI.length)|0], x:rnd(0,W), y:-30,
+        vx:rnd(-1,1), vy:rnd(2,6), s:rnd(18,36), a:1, ph:0, life:1.4, rot:rnd(-.05,.05), grav:0 }), i * 70);
+    }
+  }
+  let last = 0, spawn = 0;
+  function frame(t){
+    const dt = Math.min((t - last) / 16.7, 3); last = t;
+    ctx.clearRect(0, 0, W, H);
+    spawn += dt;
+    if (!reduce && spawn > 30 && parts.length < 45){ spawn = 0; floater(); }
+    for (let i = parts.length - 1; i >= 0; i--){
+      const p = parts[i];
+      if (p.kind === 'float'){
+        p.x += p.vx * dt + Math.sin(t / 700 + p.ph) * .5; p.y += p.vy * dt;
+        if (p.y < -50){ parts.splice(i, 1); continue; }
+      } else if (p.kind === 'burst'){
+        p.x += p.vx * dt; p.y += p.vy * dt;
+        if (p.grav !== 0) p.vy += .25 * dt;
+        p.vx *= .99; p.life -= .006 * dt; p.a = Math.max(0, Math.min(1, p.life));
+        if (p.life <= 0 || p.y > H + 60){ parts.splice(i, 1); continue; }
+      } else { /* trail */
+        p.y -= .8 * dt; p.x += Math.sin(t / 200 + p.ph) * .4; p.life -= .02 * dt; p.a = p.life;
+        if (p.life <= 0){ parts.splice(i, 1); continue; }
+      }
+      ctx.globalAlpha = p.a;
+      ctx.drawImage(SPR[p.e], p.x - p.s / 2, p.y - p.s / 2, p.s, p.s);
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  if (!reduce) for (let i = 0; i < 10; i++){ floater(); parts[parts.length-1].y = rnd(0, H); }
+  requestAnimationFrame(frame);
+
+  /* cursor trail */
+  let lastTrail = 0;
+  addEventListener('pointermove', e => {
+    if (reduce || e.timeStamp - lastTrail < 80) return;
+    lastTrail = e.timeStamp;
+    parts.push({ kind:'trail', e:EMOJI[(Math.random()*3)|0], x:e.clientX, y:e.clientY, vx:0, vy:0, s:rnd(12,22), a:1, ph:rnd(0,6), life:1 });
+  });
+
+  /* click anywhere = tiny heart pop */
+  addEventListener('pointerdown', e => { if (!reduce && !card.classList.contains('won')) burst(e.clientX, e.clientY, 6); });
+  $('heart').addEventListener('click', () => { sub.textContent = 'Auzi cum îmi bate... pentru tine 💓'; });
+
+  /* ---------- the NU button runs away, DA keeps growing ---------- */
+  const lines = [
+    'Ești sigur/ă? 🥺', 'Gândește-te mai bine... 🙈', 'Ia uite ce frumos arată DA 👀',
+    'Hai că nu mușc 😇', 'Butonul NU e timid, fuge de tine 😂', 'Mă faci să plâng... 😭',
+    'Ultima șansă! (glumesc, nu e) 😈', 'Bine, bine, apasă DA acum ❤️'
+  ];
+  const noLabels = ['NU', 'Nu prea cred', 'Sigur?', 'Pe bune?', 'Nope', 'Hmm...', 'Chiar nu?', 'Gata, renunț'];
+  let tries = 0;
+
+  function dodge(e){
+    if (card.classList.contains('won')) return;
+    if (e && e.cancelable) e.preventDefault();
+    tries++;
+    const i = Math.min(tries, lines.length) - 1;
+    sub.textContent = lines[i];
+    no.textContent = noLabels[Math.min(tries, noLabels.length - 1)];
+    no.classList.remove('shake'); void no.offsetWidth; no.classList.add('shake');
+
+    // DA grows, NU shrinks
+    yes.style.setProperty('--s', Math.min(1 + tries * .22, 2.6));
+    no.style.fontSize = Math.max(1.15 - tries * .08, .65) + 'rem';
+
+    // jump somewhere random on screen
+    const r = no.getBoundingClientRect();
+    if (!no.classList.contains('run')){
+      no.style.left = r.left + 'px'; no.style.top = r.top + 'px'; no.classList.add('run');
+      void no.offsetWidth;
+    }
+    const nr = no.getBoundingClientRect();
+    const x = rnd(12, Math.max(13, W - nr.width - 12));
+    const y = rnd(12, Math.max(13, H - nr.height - 12));
+    no.style.left = x + 'px'; no.style.top = y + 'px';
+  }
+  no.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') dodge(e); });
+  no.addEventListener('pointerdown', dodge);
+  no.addEventListener('click', e => e.preventDefault());
+  no.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') dodge(e); });
+
+  /* ---------- DA ---------- */
+  function daysTo14(){
+    const n = new Date(), y = n.getFullYear();
+    let d = new Date(y, 1, 14);
+    if (new Date(y, n.getMonth(), n.getDate()) > d) d = new Date(y + 1, 1, 14);
+    return Math.round((d - new Date(y, n.getMonth(), n.getDate())) / 864e5);
+  }
+  yes.addEventListener('click', () => {
+    const r = yes.getBoundingClientRect();
+    card.classList.add('won');
+    no.style.display = 'none';
+    const d = daysTo14();
+    $('count').textContent = d === 0 ? 'E chiar azi! 🎉' : `Mai sunt ${d} ${d === 1 ? 'zi' : 'zile'} până pe 14 ⏳`;
+    burst(innerWidth / 2, innerHeight / 2, 60);
+    setTimeout(() => burst(W * .2, H * .6, 25), 300);
+    setTimeout(() => burst(W * .8, H * .6, 25), 500);
+    if (!reduce) rain();
+    if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+  });
+
+  $('again').addEventListener('click', () => {
+    card.classList.remove('won'); tries = 0;
+    no.style.display = ''; no.classList.remove('run'); no.style.left = no.style.top = ''; no.style.fontSize = '';
+    no.textContent = 'NU'; yes.style.setProperty('--s', 1); sub.textContent = 'Alege cu grijă... 😏';
+  });
+})();
+</script>
 </body>
 </html>
